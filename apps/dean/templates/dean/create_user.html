@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Эҷоди корбар{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>Эҷоди корбари нав</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3"><label>Username</label><input type="text" name="username" class="form-control" required></div>
+        <div class="mb-3"><label>Парол</label><input type="password" name="password" class="form-control" required></div>
+        <div class="mb-3"><label>Номи пурра</label><input type="text" name="full_name" class="form-control"></div>
+        <div class="mb-3">
+            <label>Нақш</label>
+            <select name="role" class="form-control" required>
+                <option value="dean">Декан</option>
+                <option value="admin">Админ</option>
+                <option value="zamdekan">Замдекан</option>
+                <option value="teacher">Омӯзгор</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Эҷод кардан</button>
+    </form>
+</div>
+{% endblock %}

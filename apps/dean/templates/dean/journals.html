@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Журналҳо{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2><i class="fas fa-book me-2"></i> Журналҳо</h2>
+    <table class="table">
+        <thead><tr><th>Омӯзгор</th><th>Гурӯҳ</th><th>Фан</th></tr></thead>
+        <tbody>
+            {% for a in assignments %}
+            <tr><td>{{a.teacher.full_name}}</td><td>{{a.group.name}}</td><td>{{a.subject.name}}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

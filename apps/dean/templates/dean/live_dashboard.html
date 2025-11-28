@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Live Dashboard - Декан{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'dean:dashboard' %}" class="sidebar-link">
+    <i class="fas fa-home"></i> Асосӣ
+</a>
+<a href="{% url 'dean:live_dashboard' %}" class="sidebar-link active">
+    <i class="fas fa-broadcast-tower"></i> Live Dashboard
+</a>
+<a href="{% url 'dean:students' %}" class="sidebar-link">
+    <i class="fas fa-users"></i> Донишҷӯён
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="display-4 text-white">
+        <i class="fas fa-broadcast-tower me-3"></i> Live Dashboard
+    </h1>
+    <p class="text-white-50">Маълумоти фаврӣ дар бораи ҳозиршавӣ (обнавление ҳар 15 сония)</p>
+</div>
+
+<!-- Auto-refresh indicator -->
+<div class="glass p-3 mb-4">
+    <div class="d-flex align-items-center">
+        <div class="spinner-grow text-success me-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span>Навсозии автоматикӣ: <strong id="refresh-timer">15</strong> сония</span>
+    </div>
+</div>
+
+<!-- Overall Attendance Chart -->
+<div class="row g-4 mb-4">
+    <div class="col-md-8">
+        <div class="glass p-4">
+            <h5 class="mb-4"><i class="fas fa-chart-pie me-2"></i> Умумӣ ҳозиршавӣ ҳозир</h5>
+            <canvas id="attendanceChart" height="80"></canvas>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="glass p-4">
+            <h5 class="mb-4"><i class="fas fa-info-circle me-2"></i> Статистика</h5>
+            <div class="stat-item mb-3">
+                <h6 class="text-muted">Ҷамъи донишҷӯён дар дарс</h6>
+                <h2 class="text-primary" id="total-students">{{ live_data.total_students }}</h2>
+            </div>
+            <div class="stat-item mb-3">
+                <h6 class="text-muted">Ҳозир</h6>
+                <h2 class="text-success" id="present-students">{{ live_data.total_present }}</h2>
+            </div>
+            <div class="stat-item">
+                <h6 class="text-muted">Фоиз</h6>
+                <h2 class="text-info" id="percentage">{{ live_data.overall_percentage }}%</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current Lessons -->
+<div class="glass p-4">
+    <h5 class="mb-4"><i class="fas fa-clock me-2"></i> Ҳозир дарс доранд</h5>
+    
+    <div id="current-lessons" class="row g-3">
+        {% if live_data.current_lessons %}
+            {% for lesson in live_data.current_lessons %}
+            <div class="col-md-6">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-chalkboard me-2"></i> {{ lesson.subject }}
+                        </h6>
+                        <p class="card-text mb-2">
+                            <strong>Гурӯҳ:</strong> {{ lesson.group }}<br>
+                            <strong>Омӯзгор:</strong> {{ lesson.teacher }}<br>
+                            <strong>Толор:</strong> {{ lesson.room }}
+                        </p>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar bg-success" style="width: {{ lesson.percentage }}%;">
+                                {{ lesson.present }}/{{ lesson.total }} ({{ lesson.percentage }}%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Ҳоло дарс нест
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let refreshTimer = 15;
+let refreshInterval;
+
+// Chart instance
+let attendanceChart = null;
+
+// Initialize chart
+function initChart(presentCount, absentCount) {
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    
+    if (attendanceChart) {
+        attendanceChart.destroy();
+    }
+    
+    attendanceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Ҳозир', 'Ғоиб'],
+            datasets: [{
+                data: [presentCount, absentCount],
+                backgroundColor: ['#10B981', '#EF4444'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+// Load live data
+function loadLiveData() {
+    fetch('{% url "dean:live_data_api" %}')
+        .then(response => response.json())
+        .then(data => {
+            // Update stats
+            document.getElementById('total-students').textContent = data.total_students;
+            document.getElementById('present-students').textContent = data.total_present;
+            document.getElementById('percentage').textContent = data.overall_percentage + '%';
+            
+            // Update chart
+            const absent = data.total_students - data.total_present;
+            initChart(data.total_present, absent);
+            
+            // Update current lessons list
+            const lessonsContainer = document.getElementById('current-lessons');
+            if (data.current_lessons.length > 0) {
+                lessonsContainer.innerHTML = data.current_lessons.map(lesson => `
+                    <div class="col-md-6">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="fas fa-chalkboard me-2"></i> ${lesson.subject}
+                                </h6>
+                                <p class="card-text mb-2">
+                                    <strong>Гурӯҳ:</strong> ${lesson.group}<br>
+                                    <strong>Омӯзгор:</strong> ${lesson.teacher}<br>
+                                    <strong>Толор:</strong> ${lesson.room}
+                                </p>
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar bg-success" style="width: ${lesson.percentage}%;">
+                                        ${lesson.present}/${lesson.total} (${lesson.percentage}%)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                lessonsContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Ҳоло дарс нест
+                        </div>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => console.error('Error loading live data:', error));
+}
+
+// Timer countdown
+function startTimer() {
+    refreshInterval = setInterval(() => {
+        refreshTimer--;
+        document.getElementById('refresh-timer').textContent = refreshTimer;
+        
+        if (refreshTimer <= 0) {
+            refreshTimer = 15;
+            loadLiveData();
+        }
+    }, 1000);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const totalStudents = {{ live_data.total_students }};
+    const presentStudents = {{ live_data.total_present }};
+    initChart(presentStudents, totalStudents - presentStudents);
+    startTimer();
+});
+</script>
+{% endblock %}

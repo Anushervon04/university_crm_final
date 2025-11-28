@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Профили {{student.get_full_name}}{% endblock %}
+{% block content %}
+<div class="glass p-4 mb-4">
+    <h2>{{student.get_full_name}}</h2>
+    <p><strong>ID:</strong> {{student.student_id}}</p>
+    <p><strong>Гурӯҳ:</strong> {{student.group.name}}</p>
+    <p><strong>GPA:</strong> {{student.gpa}}</p>
+    <p><strong>Ҳолат:</strong> {{student.get_contract_status_display}}</p>
+</div>
+<div class="glass p-4">
+    <h5>Журнал</h5>
+    <table class="table">
+        <thead><tr><th>Сана</th><th>Фан</th><th>Баҳо</th><th>Ҳозиршавӣ</th></tr></thead>
+        <tbody>
+            {% for entry in journal_entries %}
+            <tr>
+                <td>{{entry.date}}</td>
+                <td>{{entry.teacher_assignment.subject.name}}</td>
+                <td>{{entry.grade|default:"—"}}</td>
+                <td>{% if entry.attendance %}✓{% else %}✗{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

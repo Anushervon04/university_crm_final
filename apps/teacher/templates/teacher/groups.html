@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Гурӯҳҳои ман{% endblock %}
+{% block content %}
+<div class="glass p-4"><h2>Гурӯҳҳои ман</h2>
+<table class="table"><thead><tr><th>Гурӯҳ</th><th>Фан</th><th>Амал</th></tr></thead>
+<tbody>{% for a in assignments %}<tr><td>{{a.group.name}}</td><td>{{a.subject.name}}</td>
+<td><a href="{% url 'teacher:journal' a.id %}" class="btn btn-sm btn-primary">Журнал</a></td></tr>{% endfor %}</tbody></table>
+</div>
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Декан - Dashboard{% endblock %}
+
+{% block sidebar_links %}
+<a href="{% url 'dean:dashboard' %}" class="sidebar-link active">
+    <i class="fas fa-home"></i> Асосӣ
+</a>
+<a href="{% url 'dean:live_dashboard' %}" class="sidebar-link">
+    <i class="fas fa-broadcast-tower"></i> Live Dashboard
+</a>
+<a href="{% url 'dean:students' %}" class="sidebar-link">
+    <i class="fas fa-users"></i> Донишҷӯён
+</a>
+<a href="{% url 'dean:groups' %}" class="sidebar-link">
+    <i class="fas fa-layer-group"></i> Гурӯҳҳо
+</a>
+<a href="{% url 'dean:teachers' %}" class="sidebar-link">
+    <i class="fas fa-chalkboard-teacher"></i> Омӯзгорон
+</a>
+<a href="{% url 'dean:journals' %}" class="sidebar-link">
+    <i class="fas fa-book"></i> Журналҳо
+</a>
+<a href="{% url 'dean:reports' %}" class="sidebar-link">
+    <i class="fas fa-file-pdf"></i> Ҳисоботҳо
+</a>
+<a href="{% url 'dean:users' %}" class="sidebar-link">
+    <i class="fas fa-user-cog"></i> Корбарон
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="display-4 text-white">👑 Декан - Подшоҳи мутлақ</h1>
+    <p class="text-white-50">Идоракунии пурраи донишгоҳ</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="opacity-75">Донишҷӯён</h6>
+                    <h2 class="mb-0">{{ total_students }}</h2>
+                </div>
+                <i class="fas fa-users fa-3x opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="opacity-75">Гурӯҳҳо</h6>
+                    <h2 class="mb-0">{{ total_groups }}</h2>
+                </div>
+                <i class="fas fa-layer-group fa-3x opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="opacity-75">Омӯзгорон</h6>
+                    <h2 class="mb-0">{{ total_teachers }}</h2>
+                </div>
+                <i class="fas fa-chalkboard-teacher fa-3x opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="opacity-75">Миёна GPA</h6>
+                    <h2 class="mb-0">{{ avg_gpa }}</h2>
+                </div>
+                <i class="fas fa-chart-line fa-3x opacity-25"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Today's Attendance -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="glass p-4">
+            <h5 class="mb-3"><i class="fas fa-calendar-day me-2 text-primary"></i> Ҳозиршавӣ имрӯз</h5>
+            <div class="text-center">
+                <div class="progress" style="height: 30px;">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         style="width: {{ today_percentage }}%;">
+                        {{ today_percentage }}%
+                    </div>
+                </div>
+                <p class="text-muted mt-2">Фоизи ҳозиршавӣ</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="glass p-4">
+            <h5 class="mb-3"><i class="fas fa-star me-2 text-warning"></i> Quick Actions</h5>
+            <div class="d-grid gap-2">
+                <a href="{% url 'dean:live_dashboard' %}" class="btn btn-primary">
+                    <i class="fas fa-broadcast-tower me-2"></i> Live Dashboard
+                </a>
+                <a href="{% url 'dean:students' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-users me-2"></i> Дидани донишҷӯён
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Students and Debt Students -->
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="glass p-4">
+            <h5 class="mb-3"><i class="fas fa-trophy me-2 text-warning"></i> Топ-10 Фаъолон</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ном</th>
+                            <th>GPA</th>
+                            <th>Гурӯҳ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in top_students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'dean:student_detail' student.id %}">
+                                    {{ student.get_full_name }}
+                                </a>
+                            </td>
+                            <td><span class="badge bg-success">{{ student.gpa }}</span></td>
+                            <td>{{ student.group.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="glass p-4">
+            <h5 class="mb-3"><i class="fas fa-exclamation-triangle me-2 text-danger"></i> Қарздорон</h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ном</th>
+                            <th>Гурӯҳ</th>
+                            <th>Ҳолат</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in debt_students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'dean:student_detail' student.id %}">
+                                    {{ student.get_full_name }}
+                                </a>
+                            </td>
+                            <td>{{ student.group.name }}</td>
+                            <td><span class="badge bg-danger">Қарз</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block mobile_nav %}
+<a href="{% url 'dean:dashboard' %}" class="btn btn-link">
+    <i class="fas fa-home fa-lg"></i>
+</a>
+<a href="{% url 'dean:students' %}" class="btn btn-link">
+    <i class="fas fa-users fa-lg"></i>
+</a>
+<a href="{% url 'dean:reports' %}" class="btn btn-link">
+    <i class="fas fa-file-pdf fa-lg"></i>
+</a>
+<a href="{% url 'dean:users' %}" class="btn btn-link">
+    <i class="fas fa-user-cog fa-lg"></i>
+</a>
+{% endblock %}

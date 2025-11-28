@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Журнал - {{assignment.group.name}}{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>Журнал: {{assignment.group.name}} - {{assignment.subject.name}}</h2>
+    <table class="table table-bordered"><thead><tr><th>Донишҷӯ</th><th>Охирин ёддоштҳо</th></tr></thead>
+    <tbody>{% for data in journal_data.values %}<tr><td>{{data.student.get_full_name}}</td>
+    <td>{% for e in data.entries|slice:":5" %}{{e.date}}: {{e.grade|default:"—"}} / {% if e.attendance %}✓{% else %}✗{% endif %} | {% endfor %}</td></tr>{% endfor %}</tbody>
+    </table>
+    <p class="text-muted mt-3"><small>Барои таҳрир кардан: система автоматикӣ +1.6 балл / рӯз, 3 рӯз = 6 балл. Ячейкаҳо пас аз 1 соат қулф мешаванд.</small></p>
+</div>
+{% endblock %}

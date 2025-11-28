@@ -1,0 +1,6 @@
+Django 
+Pillow 
+openpyxl 
+WeasyPrint
+django-htmx
+python-dateutil

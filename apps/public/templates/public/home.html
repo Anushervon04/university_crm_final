@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block unauthenticated_content %}
+<div class="min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="glass p-5 text-center">
+                    <h1 class="display-3 fw-bold mb-3 bg-gradient">
+                        🎓 Донишгоҳи Рақамикунонӣ
+                    </h1>
+                    <h2 class="h3 text-muted mb-4">CRM 2025</h2>
+                    
+                    <p class="lead text-muted mb-5">
+                        Системаи идоракунии донишҷӯён, омӯзгорон ва раёсат<br>
+                        Ба ҳамкорӣ ва пешрафт хуш омадед!
+                    </p>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-3">
+                            <div class="p-4 bg-light rounded">
+                                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                                <h5>Донишҷӯён</h5>
+                                <p class="small text-muted">Идоракунии профилҳо</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-4 bg-light rounded">
+                                <i class="fas fa-chalkboard-teacher fa-3x text-success mb-3"></i>
+                                <h5>Омӯзгорон</h5>
+                                <p class="small text-muted">Журнал ва баҳогузорӣ</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-4 bg-light rounded">
+                                <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                                <h5>Натиҷаҳо</h5>
+                                <p class="small text-muted">Таҳлил ва ҳисобот</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-4 bg-light rounded">
+                                <i class="fas fa-bell fa-3x text-warning mb-3"></i>
+                                <h5>Огоҳиҳо</h5>
+                                <p class="small text-muted">Хабарҳои фаврӣ</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'public:login' %}" class="btn btn-primary btn-lg px-5 py-3 rounded-pill">
+                        <i class="fas fa-sign-in-alt me-2"></i> Вуруд ба система
+                    </a>
+                    
+                    <div class="mt-5 pt-5 border-top">
+                        <p class="text-muted small">
+                            © 2025 Донишгоҳи Рақамикунонӣ. Ҳамаи ҳуқуқҳо маҳфузанд.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

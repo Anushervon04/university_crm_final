@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>Расписанияи ман</h2>
+    <table class="table"><thead><tr><th>Рӯз</th><th>Вақт</th><th>Фан</th><th>Гурӯҳ</th><th>Толор</th></tr></thead>
+    <tbody>{% for s in schedules %}<tr><td>{{s.get_weekday_display}}</td><td>{{s.start_time}}-{{s.end_time}}</td>
+    <td>{{s.teacher_assignment.subject.name}}</td><td>{{s.teacher_assignment.group.name}}</td><td>{{s.room}}</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+{% endblock %}

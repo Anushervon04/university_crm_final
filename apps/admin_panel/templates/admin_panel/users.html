@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Корбарон - Админ{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>Корбарон</h2>
+    <form method="post" class="mb-3">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create">
+        <div class="row g-2">
+            <div class="col"><input type="text" name="username" class="form-control" placeholder="Username" required></div>
+            <div class="col"><input type="password" name="password" class="form-control" placeholder="Парол" required></div>
+            <div class="col"><input type="text" name="full_name" class="form-control" placeholder="Номи пурра"></div>
+            <div class="col">
+                <select name="role" class="form-control" required>
+                    <option value="admin">Админ</option>
+                    <option value="zamdekan">Замдекан</option>
+                    <option value="teacher">Омӯзгор</option>
+                </select>
+            </div>
+            <div class="col"><button type="submit" class="btn btn-primary w-100">+ Эҷод</button></div>
+        </div>
+    </form>
+    <table class="table"><thead><tr><th>Username</th><th>Ном</th><th>Нақш</th></tr></thead>
+    <tbody>{% for u in users %}<tr><td>{{u.username}}</td><td>{{u.full_name}}</td><td>{{u.get_role_display}}</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+{% endblock %}

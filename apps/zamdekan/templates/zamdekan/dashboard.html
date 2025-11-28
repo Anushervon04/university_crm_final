@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Замдекан{% endblock %}
+{% block sidebar_links %}
+<a href="{% url 'zamdekan:index' %}" class="sidebar-link active"><i class="fas fa-home"></i> Асосӣ</a>
+<a href="{% url 'zamdekan:live_dashboard' %}" class="sidebar-link"><i class="fas fa-broadcast-tower"></i> Live</a>
+<a href="{% url 'zamdekan:students' %}" class="sidebar-link"><i class="fas fa-users"></i> Донишҷӯён</a>
+{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>👀 Замдекан - Мониторинг</h2>
+    <p class="text-muted">Режими дидан (Read-only)</p>
+    <div class="row g-3 mt-3">
+        <div class="col-md-6"><div class="stat-card"><h3>{{total_students}}</h3><p>Донишҷӯён</p></div></div>
+        <div class="col-md-6"><div class="stat-card"><h3>{{total_groups}}</h3><p>Гурӯҳҳо</p></div></div>
+    </div>
+</div>
+{% endblock %}

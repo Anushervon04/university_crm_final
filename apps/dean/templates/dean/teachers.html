@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Омӯзгорон{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2><i class="fas fa-chalkboard-teacher me-2"></i> Омӯзгорон</h2>
+    <table class="table">
+        <thead><tr><th>Ном</th><th>Телефон</th><th>Email</th></tr></thead>
+        <tbody>
+            {% for t in teachers %}
+            <tr><td>{{t.full_name}}</td><td>{{t.phone}}</td><td>{{t.email}}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

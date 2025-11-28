@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Донишҷӯён - Замдекан{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>Донишҷӯён (Read-only)</h2>
+    <table class="table data-table"><thead><tr><th>ID</th><th>Ном</th><th>Гурӯҳ</th><th>GPA</th></tr></thead>
+    <tbody>{% for s in students %}<tr><td>{{s.student_id}}</td><td>{{s.get_full_name}}</td><td>{{s.group.name}}</td><td>{{s.gpa}}</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+{% endblock %}

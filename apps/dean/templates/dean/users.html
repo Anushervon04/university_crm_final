@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Корбарон{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2><i class="fas fa-user-cog me-2"></i> Корбарон</h2>
+    <a href="{% url 'dean:create_user' %}" class="btn btn-primary mb-3">+ Эҷоди корбар</a>
+    <table class="table">
+        <thead><tr><th>Username</th><th>Ном</th><th>Нақш</th></tr></thead>
+        <tbody>
+            {% for u in users %}
+            <tr><td>{{u.username}}</td><td>{{u.full_name}}</td><td>{{u.get_role_display}}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

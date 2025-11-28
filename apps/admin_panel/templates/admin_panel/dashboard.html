@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Админ{% endblock %}
+{% block sidebar_links %}
+<a href="{% url 'admin_panel:dashboard' %}" class="sidebar-link active"><i class="fas fa-home"></i> Асосӣ</a>
+<a href="{% url 'admin_panel:users' %}" class="sidebar-link"><i class="fas fa-users"></i> Корбарон</a>
+<a href="{% url 'admin_panel:students' %}" class="sidebar-link"><i class="fas fa-user-graduate"></i> Донишҷӯён</a>
+{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>⚙️ Админ панель</h2>
+    <div class="row g-3 mt-3">
+        <div class="col-md-4"><div class="stat-card"><h3>{{total_users}}</h3><p>Корбарон</p></div></div>
+        <div class="col-md-4"><div class="stat-card"><h3>{{total_students}}</h3><p>Донишҷӯён</p></div></div>
+        <div class="col-md-4"><div class="stat-card"><h3>{{total_groups}}</h3><p>Гурӯҳҳо</p></div></div>
+    </div>
+</div>
+{% endblock %}

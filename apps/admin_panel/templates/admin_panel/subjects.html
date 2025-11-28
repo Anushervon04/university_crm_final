@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Фанҳо{% endblock %}
+{% block content %}
+<div class="glass p-4"><h2>Фанҳо</h2>
+<table class="table"><thead><tr><th>Ном</th><th>Код</th><th>Курс</th></tr></thead>
+<tbody>{% for s in subjects %}<tr><td>{{s.name}}</td><td>{{s.code}}</td><td>{{s.course}}</td></tr>{% endfor %}</tbody></table>
+</div>
+{% endblock %}

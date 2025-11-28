@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Импорт Excel{% endblock %}
+{% block content %}
+<div class="glass p-4"><h2>Импорт аз Excel</h2>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="mb-3"><label>Таъинот</label>
+<select name="assignment_id" class="form-control" required>
+{% for a in assignments %}<option value="{{a.id}}">{{a.teacher.full_name}} - {{a.group.name}} - {{a.subject.name}}</option>{% endfor %}
+</select></div>
+<div class="mb-3"><label>Файли Excel</label><input type="file" name="excel_file" class="form-control" accept=".xlsx" required></div>
+<button type="submit" class="btn btn-success">Импорт</button>
+</form>
+</div>
+{% endblock %}

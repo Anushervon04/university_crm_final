@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Ҳисоботҳо{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2><i class="fas fa-file-pdf me-2"></i> Ҳисоботҳо</h2>
+    <a href="{% url 'dean:export_pdf' %}" class="btn btn-danger">
+        <i class="fas fa-file-pdf me-2"></i> Экспорт ба PDF
+    </a>
+</div>
+{% endblock %}

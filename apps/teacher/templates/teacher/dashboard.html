@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Омӯзгор{% endblock %}
+{% block sidebar_links %}
+<a href="{% url 'teacher:dashboard' %}" class="sidebar-link active"><i class="fas fa-home"></i> Асосӣ</a>
+<a href="{% url 'teacher:schedule' %}" class="sidebar-link"><i class="fas fa-calendar"></i> Расписание</a>
+<a href="{% url 'teacher:groups' %}" class="sidebar-link"><i class="fas fa-users"></i> Гурӯҳҳо</a>
+{% endblock %}
+{% block content %}
+<div class="glass p-4">
+    <h2>📚 Омӯзгор панель</h2>
+    <h5 class="mt-4">Таъинотҳои ман</h5>
+    <table class="table"><thead><tr><th>Гурӯҳ</th><th>Фан</th><th>Амал</th></tr></thead>
+    <tbody>{% for a in assignments %}<tr><td>{{a.group.name}}</td><td>{{a.subject.name}}</td>
+    <td><a href="{% url 'teacher:journal' a.id %}" class="btn btn-sm btn-primary">Журнал</a></td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+{% endblock %}
